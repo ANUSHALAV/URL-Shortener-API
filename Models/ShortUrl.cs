@@ -3,10 +3,10 @@
     public class ShortUrl
     {
         public int Id { get; set; }
-        public string OriginalURL { get; set; }
-        public string ShortURL { get; set; }
+        public string OriginalUrl { get; set; }
+        public string ShortCode { get; set; }
         public int Status { get; set; }
-        public int NumberOfClicks { get; set; }
+        public int ClickCount { get; set; }
         public DateTime CreatedAt { get; set; }
 
     }

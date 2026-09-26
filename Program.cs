@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using URL_Shortener_API.Data;
 using URL_Shortener_API.Services;
 using URL_Shortener_API.Services.Interfaces;
 
@@ -11,6 +13,18 @@ builder.Services.AddControllers();
 // swagger services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// EF Core + MySQL
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    var connectionString =
+        builder.Configuration.GetConnectionString("DefaultConnection");
+
+    options.UseMySql(
+        connectionString,
+        ServerVersion.AutoDetect(connectionString)
+    );
+});
 
 // Register the UrlService with the DI container
 builder.Services.AddScoped<IUrlService,UrlService>();

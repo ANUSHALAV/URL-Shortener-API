@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using URL_Shortener_API.Services.Interfaces;
 
 namespace URL_Shortener_API.Controllers
@@ -31,6 +32,24 @@ namespace URL_Shortener_API.Controllers
             }
 
             return Ok();
+        }
+
+
+        [HttpGet("{shortCode}")]
+        public async Task<IActionResult> RedirectToOriginalUrl(string shortCode)
+        {
+            var shortUrl = await _urlService.RedirectToOriginalUrlAsync(shortCode);
+
+            if (shortUrl == null)
+            {
+                return NotFound(new
+                {
+                    Message = "Short URL not found."
+                });
+            }
+
+            // Redirect to original URL
+            return Ok(shortUrl);
         }
 
     }
