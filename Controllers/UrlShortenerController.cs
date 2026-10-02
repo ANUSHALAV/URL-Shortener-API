@@ -5,40 +5,41 @@ using URL_Shortener_API.Services.Interfaces;
 namespace URL_Shortener_API.Controllers
 {
     [Route("api/[controller]")]
-    public class UrlController : ControllerBase
+    public class UrlShortenerController : ControllerBase
     {
         private readonly IUrlService _urlService;
 
-        public UrlController(IUrlService urlService)
+        public UrlShortenerController(IUrlService urlService)
         {
             _urlService = urlService;
         }
 
-        [HttpGet]
-        [Route("shorten")]
-        public async Task<IActionResult> Shorten(string URL)
+        [HttpPost]
+        [Route("CreateShortUrl")]
+        public async Task<IActionResult> CreateShortUrlAsync(string url)
         {
-            if (string.IsNullOrEmpty(URL))
+            if (string.IsNullOrEmpty(url))
             {
                 return BadRequest("URL parameter is required.");
             }
-            else if (!Uri.IsWellFormedUriString(URL, UriKind.Absolute))
+            else if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
             {
                 return BadRequest("Invalid URL format.");
             }
             else
             {
-                var shortUrl = await _urlService.ShortenUrlAsync(URL);
+                var shortUrl = await _urlService.CreateShortUrlAsync(url);
             }
 
             return Ok();
         }
 
 
-        [HttpGet("{shortCode}")]
-        public async Task<IActionResult> RedirectToOriginalUrl(string shortCode)
+        [HttpGet]
+        [Route("CallShortUrl")]
+        public async Task<IActionResult> CallShortUrlAsync(string shortCode)
         {
-            var shortUrl = await _urlService.RedirectToOriginalUrlAsync(shortCode);
+            var shortUrl = await _urlService.CallShortUrlAsync(shortCode);
 
             if (shortUrl == null)
             {

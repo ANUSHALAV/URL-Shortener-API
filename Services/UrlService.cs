@@ -15,7 +15,7 @@ namespace URL_Shortener_API.Services
             _context = context;
         }
 
-        public async Task<IActionResult> ShortenUrlAsync(string url)
+        public async Task<IActionResult> CreateShortUrlAsync(string url)
         {
             // 1. Validate URL
             if (string.IsNullOrWhiteSpace(url))
@@ -52,7 +52,9 @@ namespace URL_Shortener_API.Services
                 OriginalUrl = url,
                 ShortCode = shortCode,
                 CreatedAt = DateTime.UtcNow,
-                ClickCount = 0
+                ClickCount = 0,
+                Status = 1,
+
             };
 
             // 5. Save to database
@@ -87,7 +89,7 @@ namespace URL_Shortener_API.Services
             );
         }
 
-        public async Task<IActionResult> RedirectToOriginalUrlAsync(string shortCode)
+        public async Task<IActionResult> CallShortUrlAsync(string shortCode)
         {
             var shortUrl = await _context.ShortUrls.FirstOrDefaultAsync(x => x.ShortCode == shortCode);
 
